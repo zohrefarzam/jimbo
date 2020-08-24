@@ -11,7 +11,8 @@ import normalize from 'react-native-normalize';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Button} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import {withNavigation} from 'react-navigation';
+import {withNavigation, ScrollView} from 'react-navigation';
+import CustomModal from '../../../components/CustomModal';
 class Tab5 extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class Tab5 extends Component {
       father: '',
       date: '',
       phone: '',
+      dialog: false,
     };
   }
   async componentWillMount() {
@@ -44,7 +46,7 @@ class Tab5 extends Component {
   };
   render() {
     return (
-      <View>
+      <ScrollView>
         <View
           style={{
             flexDirection: 'row-reverse',
@@ -76,7 +78,7 @@ class Tab5 extends Component {
                 start: {x: 0, y: 0.5},
                 end: {x: 1, y: 0.5},
               }}
-              onPress={() => this.Exit()}
+              onPress={() => this.setState({dialog: true})}
             />
           </View>
         </View>
@@ -122,7 +124,20 @@ class Tab5 extends Component {
             </View>
           </View>
         </View>
-      </View>
+        <CustomModal
+          isVisible={this.state.dialog}
+          describe=" آیا میخواهید از برنامه خارج شوید؟"
+          onConfirm={() => {
+            this.Exit();
+            this.setState({dialog: false});
+          }}
+          confirmTitle="بله"
+          onCancle={() => {
+            this.setState({dialog: false});
+          }}
+          cancleTitle="لغو"
+        />
+      </ScrollView>
     );
   }
 }

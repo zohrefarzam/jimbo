@@ -29,6 +29,17 @@ import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment-jalaali';
 import {connect} from 'react-redux';
 import {GetUser} from '../../../api/methods/GetUser';
+import ImagePicker from 'react-native-image-picker';
+const options = {
+  title: 'انتخاب تصویر',
+  takePhotoButtonTitle: 'گرفتن از دوربین ...',
+  chooseFromLibraryButtonTitle: 'انتخاب از گالری تصاویر ...',
+  cancelButtonTitle: 'لغو',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 class Tab1 extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +67,9 @@ class Tab1 extends Component {
       card: '',
       sms: '',
       selfi: '',
+      disable1: false,
+      disable2: false,
+      disable3: false,
     };
   }
   async componentWillMount() {
@@ -71,21 +85,70 @@ class Tab1 extends Component {
     this.setState({card: result.IsOk});
     this.setState({sms: result.Is_Phone_Ok});
     this.setState({selfi: result.Is_Selfi_Ok});
+    if (this.state.card === 'yes') {
+      this.setState({disable1: true});
+    }
+    if (this.state.selfi === 'yes') {
+      this.setState({disable2: true});
+    }
+    if (this.state.sms === 'yes') {
+      this.setState({disable3: true});
+    }
   }
   selectPhotoTapped() {
-    picker((source, data) =>
-      this.setState({ImageSource: source, data}, () => {
-        console.log(this.state);
-      }),
-    );
+    // picker((source, data) =>
+    //   this.setState({ImageSource: source, data}, () => {
+    //     console.log(this.state);
+    //     console.log("Imagesource=" + JSON.stringify(source));
+    //   }),
+
+    ImagePicker.showImagePicker(options, response => {
+      //console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri};
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          ImageSource: source,
+          data: response.data,
+        });
+      }
+      console.log('image', this.state.ImageSource);
+    });
     this.setState({btn2: 'ارسال عکس کارت ملی'});
   }
   selectPhotoTapped2() {
-    picker((source2, data2) =>
-      this.setState({ImageSource2: source2, data2}, () => {
-        console.log(this.state);
-      }),
-    );
+    ImagePicker.showImagePicker(options, response => {
+      //console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri};
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          ImageSource2: source,
+          data2: response.data,
+        });
+      }
+      console.log('image', this.state.ImageSource2);
+    });
     this.setState({btn3: 'ارسال عکس سلفی'});
   }
   uploadImageToServer = () => {
@@ -111,7 +174,7 @@ class Tab1 extends Component {
       var tempMSG = resp.data;
       tempMSG = tempMSG.replace(/^"|"$/g, '');
       this.setState({Meli: tempMSG});
-      console.log(tempMSG);
+      console.log('img', tempMSG);
       fetch('https://jimbooexchange.com/php_api/insert_meli.php', {
         method: 'POST',
         headers: {
@@ -141,16 +204,16 @@ class Tab1 extends Component {
         },
       ],
     ).then(resp => {
-      var tempMSG = resp.data;
-      tempMSG = tempMSG.replace(/^"|"$/g, '');
-      this.setState({Meli: tempMSG});
-      console.log(tempMSG);
+      var tempMSG2 = resp.data;
+      tempMSG2 = tempMSG2.replace(/^"|"$/g, '');
+      this.setState({selfi: tempMSG2});
+      console.log(tempMSG2);
       fetch('https://jimbooexchange.com/php_api/insert_selfi.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
         },
-        body: `User_Name=${name}&User_Id=${id}&Time=${date}&Pic_Link=${tempMSG}&kind=${'selfi'}`,
+        body: `User_Name=${name}&User_Id=${id}&Time=${date}&Pic_Link=${tempMSG2}&kind=${'selfi'}`,
       });
     });
   };
@@ -245,6 +308,7 @@ class Tab1 extends Component {
         />
       );
     const {sms, selfi, card} = this.state;
+
     return (
       <ScrollView style={{flex: 1}}>
         <View style={{marginVertical: hp(2), marginHorizontal: wp(5)}}>
@@ -256,39 +320,6 @@ class Tab1 extends Component {
               </Text>
             </View>
           ) : null}
-          {/* <AutoHeightWebView
-            style={{
-              marginVertical: 10,
-              width: Dimensions.get('window').width - 70,
-              alignSelf: 'center',
-            }}
-            customStyle={`
-                @font-face {font-family: 'IRANSansMobile'; src:url('file:///android_asset/fonts/IRANSansMobile.ttf')}
-                body {
-                  font-family: IRANSansMobile;
-                  font-size: 0.9rem;
-                  
-                  text-align: justify;
-                  direction: rtl;
-                }
-              `}
-            onSizeUpdated={size => console.log('size', size)}
-            files={[
-              {
-                href: 'cssfileaddress',
-                type: 'text/css',
-                rel: 'stylesheet',
-              },
-            ]}
-            source={{
-              html: `
-                <body>
-                دست نویسی با متن «اینجانب (نام و نام خانوادگی) به کد ملی (کد ملی) ضمن مطالعه و تایید قوانین استفاده از خدمات جیمبو متعهد میگردم حساب کاربری و مدارک خود را در اختیار اشخاص غیر قرار ندهم و در صورت تخلف، مسئولیت آن را بر عهده بگیرم.جهت احراز حویت در سایت جیمبو - تاریخ - امضاء» تهیه کرده و به همراه کارت ملی خود و تصویر خود و دستنویس خود عکسی سلفی بگیرید. توجه داشته باشید که تصویر شما، کارت ملی و دست نویس همگی واضح باشند و در سایت بارگزاری نمایید.s
-                </body>`,
-            }}
-            // scalesPageToFit={true}
-            viewportContent={'width=device-width, initial-scale=1.0'}
-          /> */}
           <View>
             <View>
               <View
@@ -302,6 +333,7 @@ class Tab1 extends Component {
                   <View style={style.imageView}>{image}</View>
                 </View>
                 <Button
+                  disabled={this.state.disable1}
                   TouchableComponent={TouchableOpacity}
                   ViewComponent={LinearGradient} // Don't forget this!
                   title={this.state.btn2}
@@ -339,8 +371,6 @@ class Tab1 extends Component {
                   width: Dimensions.get('window').width - 100,
                   alignSelf: 'center',
                   margin: hp(2),
-                  borderColor: '#13a2a6',
-                  borderWidth: 2,
                 }}
                 customStyle={`
                 div {
@@ -386,6 +416,7 @@ class Tab1 extends Component {
               </View>
 
               <Button
+                disabled={this.state.disable2}
                 TouchableComponent={TouchableOpacity}
                 ViewComponent={LinearGradient} // Don't forget this!
                 title={this.state.btn3}
@@ -433,6 +464,7 @@ class Tab1 extends Component {
                   {/* <Text>{persianNumber(this.state.phone)}</Text> */}
                 </View>
                 <Button
+                  disabled={this.state.disable3}
                   TouchableComponent={TouchableOpacity}
                   ViewComponent={LinearGradient} // Don't forget this!
                   title={this.state.btn}
@@ -465,7 +497,7 @@ class Tab1 extends Component {
                 تایید شده
               </Text>
             </View>
-           
+
           </View> */}
         </View>
         <CustomModal

@@ -21,6 +21,7 @@ import {
   Pay,
   Arz,
   Arz2,
+  MainSplash,
 } from '../screens';
 import navigationStyle from './navigationStyle';
 import images from '../config/images';
@@ -28,7 +29,7 @@ import styles from '../config/styles';
 import normalize from 'react-native-normalize';
 const SplashScreen = createStackNavigator({
   Splash: {
-    screen: Splash,
+    screen:MainSplash,
     navigationOptions: {
       headerShown: false,
     },
@@ -209,6 +210,7 @@ const Home = createBottomTabNavigator(
 );
 
 const RNApp = createSwitchNavigator({
+  SplashScreen,
   Auth,
   Home: {
     screen: Home,

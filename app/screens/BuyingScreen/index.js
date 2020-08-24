@@ -472,7 +472,7 @@ class BuyingScreen extends Component {
       case 8:
         return prices[2]?.current_price;
       case 9:
-        return;
+        return 1;
       case 10:
         return;
     }
@@ -501,7 +501,7 @@ class BuyingScreen extends Component {
       case 8:
         return prices[2]?.current_price;
       case 9:
-        return;
+        return 1;
       case 10:
         return;
     }
@@ -512,6 +512,7 @@ class BuyingScreen extends Component {
     const d = parseInt(setting[0]?.Defrent);
     const p = parseInt(dollar?.sana_buy_usd?.p);
     const def = Math.abs(d + p);
+    const vd = setting[0]?.vocher_defrens;
     switch (this.state.menu) {
       case 1:
         return Math.abs((prices[0]?.current_price * def) / 10);
@@ -560,9 +561,9 @@ class BuyingScreen extends Component {
       case 8:
         return Math.abs((prices[2]?.current_price * def) / 10);
       case 9:
-        return (Math.abs(def * vd) / 10).toFixed(3);
+        return (Math.abs(def * vd) / 10).toFixed();
       case 10:
-        return;
+        return 1;
     }
   };
   renderSymbol = () => {
@@ -616,6 +617,8 @@ class BuyingScreen extends Component {
     const url = setting[0]?.Telegram_link;
     const p = parseInt(dollar?.sana_buy_usd?.p);
     const def = Math.abs(d + p);
+    let first;
+    let second;
     return (
       <ScrollView style={style.main}>
         <StatusBar hidden={true} />
@@ -667,14 +670,14 @@ class BuyingScreen extends Component {
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.arz * this.renderRial(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                             : ` ${persianNumber(
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.arz / this.renderRial2(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                           : null
@@ -689,21 +692,21 @@ class BuyingScreen extends Component {
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.rial / this.renderRial(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                             : ` ${persianNumber(
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.rial * this.renderRial2(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                           : null;
                       }}
                       onChange={async () => {
                         this.setState({
-                          clearInput:'',
+                          clearInput: '',
                         });
                         (await this.state.clearInput)
                           ? this.renderTitle2() === 'تومان'
@@ -711,18 +714,19 @@ class BuyingScreen extends Component {
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.rial / this.renderRial(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                             : ` ${persianNumber(
                                 numberWithCommas(
                                   Math.abs(
                                     this.state.rial * this.renderRial2(),
-                                  ).toFixed(5),
+                                  ).toFixed(),
                                 ),
                               )} `
                           : null;
                       }}
+                      onSubmitEditing={() => first._root.focus()}
                       onChangeText={t => {
                         this.setState({
                           rial: latinNumber(t),
@@ -766,7 +770,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 1});
+                            this.setState({
+                              menu2: 1,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -785,7 +793,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 2});
+                            this.setState({
+                              menu2: 2,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -804,7 +816,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 3});
+                            this.setState({
+                              menu2: 3,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -823,7 +839,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 4});
+                            this.setState({
+                              menu2: 4,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -842,7 +862,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 5});
+                            this.setState({
+                              menu2: 5,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -861,7 +885,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 6});
+                            this.setState({
+                              menu2: 6,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -880,7 +908,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 7});
+                            this.setState({
+                              menu2: 7,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -899,7 +931,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 8});
+                            this.setState({
+                              menu2: 8,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -918,7 +954,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 9});
+                            this.setState({
+                              menu2: 9,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() !== 'تومان') {
                               this.setState({dialog2: true});
@@ -937,7 +977,11 @@ class BuyingScreen extends Component {
                         <MenuDivider />
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({menu2: 10});
+                            this.setState({
+                              menu2: 10,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
                             this.hideMenu2();
                             if (this.renderTitle() === 'تومان') {
                               this.setState({dialog4: true});
@@ -993,14 +1037,14 @@ class BuyingScreen extends Component {
                               numberWithCommas(
                                 Math.abs(
                                   this.state.rial / this.renderRial(),
-                                ).toFixed(5),
+                                ).toFixed(),
                               ),
                             )} `
                           : ` ${persianNumber(
                               numberWithCommas(
                                 Math.abs(
                                   this.state.rial * this.renderRial2(),
-                                ).toFixed(5),
+                                ).toFixed(),
                               ),
                             )} `
                         : null
@@ -1015,14 +1059,14 @@ class BuyingScreen extends Component {
                               numberWithCommas(
                                 Math.abs(
                                   this.state.arz * this.renderRial(),
-                                ).toFixed(5),
+                                ).toFixed(),
                               ),
                             )} `
                           : ` ${persianNumber(
                               numberWithCommas(
                                 Math.abs(
                                   this.state.arz / this.renderRial2(),
-                                ).toFixed(5),
+                                ).toFixed(),
                               ),
                             )} `
                         : null;
@@ -1068,7 +1112,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 1});
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 1,
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1084,8 +1132,15 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 2});
+                          this.setState({
+                            menu: 2,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
+                          this.setState({
+                            clearInput2: '',
+                          });
                         }}
                         style={style.menuItem}>
                         <View>
@@ -1100,7 +1155,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 3});
+                          this.setState({
+                            menu: 3,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1116,7 +1175,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 4});
+                          this.setState({
+                            menu: 4,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1132,7 +1195,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 5});
+                          this.setState({
+                            menu: 5,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1148,7 +1215,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 6});
+                          this.setState({
+                            menu: 6,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1164,7 +1235,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 7});
+                          this.setState({
+                            menu: 7,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1180,7 +1255,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 8});
+                          this.setState({
+                            menu: 8,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1196,7 +1275,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 9});
+                          this.setState({
+                            menu: 9,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
@@ -1212,7 +1295,11 @@ class BuyingScreen extends Component {
                       <MenuDivider />
                       <TouchableOpacity
                         onPress={() => {
-                          this.setState({menu: 10});
+                          this.setState({
+                            menu: 10,
+                            clearInput: '',
+                            clearInput2: '',
+                          });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>

@@ -34,7 +34,7 @@ class BuyingScreen extends Component {
     this.state = {
       dollar: [],
       menu: 1,
-      menu2: 10,
+      menu2: 24,
       rial: '',
       arz: '',
       numb: '',
@@ -43,6 +43,46 @@ class BuyingScreen extends Component {
       phone: '',
       mail: '',
       link: '',
+      btcN: null,
+      bchN: null,
+      xrpN: null,
+      xmrN: null,
+      trxN: null,
+      ltcN: null,
+      ethN: null,
+      dogeN: null,
+      dashN: null,
+      bnbN: null,
+      adaN: null,
+      xlmN: null,
+      linkSN: null,
+      miotaN: null,
+      neoN: null,
+      zecN: null,
+      yfiN: null,
+      yfiiN: null,
+      sxpN: null,
+      usdtN: null,
+      btc: null,
+      bch: null,
+      xrp: null,
+      xmr: null,
+      trx: null,
+      ltc: null,
+      eth: null,
+      doge: null,
+      dash: null,
+      bnb: null,
+      ada: null,
+      xlm: null,
+      linkS: null,
+      miota: null,
+      neo: null,
+      zec: null,
+      yfi: null,
+      yfii: null,
+      sxp: null,
+      usdt: null,
       wallet: false,
       dialog1: false,
       dialog3: false,
@@ -87,6 +127,67 @@ class BuyingScreen extends Component {
   async componentWillMount() {
     this.props.dispatch(FetchPrices());
     this.props.dispatch(FetchSetting());
+    const {prices} = this.props;
+    const btc = prices.find(({symbol}) => symbol === 'btc');
+    this.setState({btc: JSON.parse(parseFloat(btc.current_price))});
+    this.setState({btcN: JSON.stringify(btc.name)});
+    const bch = prices.find(({symbol}) => symbol === 'bch');
+    this.setState({bch: JSON.parse(parseFloat(bch.current_price))});
+    this.setState({bchN: JSON.stringify(bch.name)});
+    const xrp = prices.find(({symbol}) => symbol === 'xrp');
+    this.setState({xrp: JSON.parse(parseFloat(xrp.current_price))});
+    this.setState({xrpN: JSON.stringify(xrp.name)});
+    const xmr = prices.find(({symbol}) => symbol === 'xmr');
+    this.setState({xmr: JSON.parse(parseFloat(xmr.current_price))});
+    this.setState({xmrN: JSON.stringify(xmr.name)});
+    const trx = prices.find(({symbol}) => symbol === 'trx');
+    this.setState({trx: JSON.parse(parseFloat(trx.current_price))});
+    this.setState({trxN: JSON.stringify(trx.name)});
+    const ltc = prices.find(({symbol}) => symbol === 'ltc');
+    this.setState({ltc: JSON.parse(parseFloat(ltc.current_price))});
+    this.setState({ltcN: JSON.stringify(ltc.name)});
+    const eth = prices.find(({symbol}) => symbol === 'eth');
+    this.setState({eth: JSON.parse(parseFloat(eth.current_price))});
+    this.setState({ethN: JSON.stringify(eth.name)});
+    const doge = prices.find(({symbol}) => symbol === 'doge');
+    this.setState({doge: JSON.parse(parseFloat(doge.current_price))});
+    this.setState({dogeN: JSON.stringify(doge.name)});
+    const dash = prices.find(({symbol}) => symbol === 'dash');
+    this.setState({dash: JSON.parse(parseFloat(dash.current_price))});
+    this.setState({dashN: JSON.stringify(dash.name)});
+    const bnb = prices.find(({symbol}) => symbol === 'bnb');
+    this.setState({bnb: JSON.parse(parseFloat(bnb.current_price))});
+    this.setState({bnbN: JSON.stringify(bnb.name)});
+    const ada = prices.find(({symbol}) => symbol === 'ada');
+    this.setState({ada: JSON.parse(parseFloat(ada.current_price))});
+    this.setState({adaN: JSON.stringify(ada.name)});
+    const xlm = prices.find(({name}) => name === 'Stellar');
+    this.setState({xlm: JSON.parse(parseFloat(xlm.current_price))});
+    this.setState({xlmN: JSON.stringify(xlm.name)});
+    const linkS = prices.find(({symbol}) => symbol === 'link');
+    this.setState({linkS: JSON.parse(parseFloat(linkS.current_price))});
+    this.setState({linkSN: JSON.stringify(linkS.name)});
+    const miota = prices.find(({symbol}) => symbol === 'miota');
+    this.setState({miota: JSON.parse(parseFloat(miota.current_price))});
+    this.setState({miotaN: JSON.stringify(miota.name)});
+    const neo = prices.find(({symbol}) => symbol === 'neo');
+    this.setState({neo: JSON.parse(parseFloat(neo.current_price))});
+    this.setState({neoN: JSON.stringify(neo.name)});
+    const zec = prices.find(({symbol}) => symbol === 'zec');
+    this.setState({zec: JSON.parse(parseFloat(zec.current_price))});
+    this.setState({zecN: JSON.stringify(zec.name)});
+    const yfi = prices.find(({symbol}) => symbol === 'yfi');
+    this.setState({yfi: JSON.parse(parseFloat(yfi.current_price))});
+    this.setState({yfiN: JSON.stringify(yfi.name)});
+    const yfii = prices.find(({symbol}) => symbol === 'yfii');
+    this.setState({yfii: JSON.parse(parseFloat(yfii.current_price))});
+    this.setState({yfiiN: JSON.stringify(yfii.name)});
+    const sxp = prices.find(({symbol}) => symbol === 'sxp');
+    this.setState({sxp: JSON.parse(parseFloat(sxp.current_price))});
+    this.setState({sxpN: JSON.stringify(sxp.name)});
+    const usdt = prices.find(({symbol}) => symbol === 'usdt');
+    this.setState({usdt: JSON.parse(parseFloat(usdt.current_price))});
+    this.setState({usdtN: JSON.stringify(usdt.name)});
     // this.props.dispatch(FetchDollar());
     fetch('https://api.tgju.online/v1/data/sana/json')
       .then(response => response.json())
@@ -135,27 +236,56 @@ class BuyingScreen extends Component {
   renderTitle2 = () => {
     switch (this.state.menu2) {
       case 1:
-        return 'بیت کوین';
+        return '(BTC) بیت کوین';
       case 2:
-        return 'بیت کوین کش';
+        return '(BCH) بیت کوین کش';
       case 3:
-        return 'ریپل';
+        return '(XRP) ریبل';
       case 4:
-        return 'ترون';
+        return '(TRX) ترون';
       case 5:
-        return 'لایت کوین ';
+        return '(LTC) لایت کوین';
       case 6:
-        return 'اتریوم';
+        return '(ETH) اتریوم';
       case 7:
-        return 'دش کوین';
+        return '(DASH) دش کوین';
       case 8:
-        return 'تتر';
+        return '(XMR) مونرو';
       case 9:
-        return 'پرفکت مانی';
+        return ' (DOGE) داج کوین';
       case 10:
+        return '(ADA) کاردانو';
+      case 11:
+        return '(XLM) استلار';
+      case 12:
+        return '(LINK) چین لینک';
+      case 13:
+        return ' (BNB) کوین بایننس';
+      case 14:
+        return '(IOTA) آیوتا';
+      case 15:
+        return '(NEO) نئو';
+      case 16:
+        return '(YFI) یرن فایننس';
+      case 17:
+        return '(YFII) یرن فایننس';
+      case 18:
+        return '(ZEC) زی کش';
+      case 19:
+        return '(SXP) سوایپ';
+      case 20:
+        return ' (USDT)(ERC20) تتر';
+      case 21:
+        return '(USDT)(OMNI) تتر';
+      case 22:
+        return '(USDT)(TRC20) تتر';
+      case 23:
+        return '(PM) پرفکت مانی';
+      case 24:
         return 'تومان';
     }
   };
+
   idPay = () => {
     const {name, id, phone, mail, rial} = this.state;
     const rand = Math.floor(Math.random() * 10000) + 1;
@@ -190,7 +320,7 @@ class BuyingScreen extends Component {
 
   submitBuying = () => {
     const {name, id, phone, mail, rial, wallet, shaba} = this.state;
-    const {setting, navigation} = this.props;
+    const {setting, navigation, prices} = this.props;
     const ress = shaba.find(({Is_Ok}) => Is_Ok === 'yes');
     const result = wallet.filter(({Wallet_Name}) =>
       Wallet_Name.includes(this.renderTitle()),
@@ -327,27 +457,76 @@ class BuyingScreen extends Component {
   };
 
   renderSubTitle2 = () => {
-    const {prices} = this.props;
+    const {
+      btcN,
+      bchN,
+      xrpN,
+      xmrN,
+      trxN,
+      ltcN,
+      ethN,
+      dogeN,
+      dashN,
+      bnbN,
+      adaN,
+      xlmN,
+      linkSN,
+      miotaN,
+      neoN,
+      zecN,
+      yfiN,
+      yfiiN,
+      sxpN,
+      usdtN,
+    } = this.state;
     switch (this.state.menu2) {
       case 1:
-        return prices[0]?.name;
+        return btcN;
       case 2:
-        return prices[4]?.name;
+        return bchN;
       case 3:
-        return prices[3]?.name;
+        return xrpN;
       case 4:
-        return prices[16]?.name;
+        return trxN;
       case 5:
-        return prices[7]?.name;
+        return ltcN;
       case 6:
-        return prices[1]?.name;
+        return ethN;
       case 7:
-        return prices[25]?.name;
+        return dashN;
       case 8:
-        return prices[2]?.name;
+        return xmrN;
       case 9:
-        return 'Perfect Money';
+        return dogeN;
       case 10:
+        return adaN;
+      case 11:
+        return xlmN;
+      case 12:
+        return linkSN;
+      case 13:
+        return bnbN;
+      case 14:
+        return miotaN;
+      case 15:
+        return neoN;
+      case 16:
+        return yfiN;
+      case 17:
+        return yfiiN;
+      case 18:
+        return zecN;
+      case 19:
+        return sxpN;
+      case 20:
+        return usdtN;
+      case 21:
+        return usdtN;
+      case 22:
+        return usdtN;
+      case 23:
+        return 'Perfect Money';
+      case 24:
         return 'Toman';
     }
   };
@@ -368,59 +547,164 @@ class BuyingScreen extends Component {
       case 7:
         return images.example.dash;
       case 8:
-        return images.example.tether;
+        return images.example.monro;
       case 9:
-        return images.example.pm;
+        return images.example.doge;
       case 10:
+        return images.example.cardano;
+      case 11:
+        return images.example.staller;
+      case 12:
+        return images.example.chainlink;
+      case 13:
+        return images.example.binance;
+      case 14:
+        return images.example.iota;
+      case 15:
+        return images.example.neo;
+      case 16:
+        return images.example.yfi;
+      case 17:
+        return images.example.yfii;
+      case 18:
+        return images.example.zcash;
+      case 19:
+        return images.example.sxp;
+      case 20:
+        return images.example.tether;
+      case 21:
+        return images.example.tether;
+      case 22:
+        return images.example.tether;
+      case 23:
+        return images.example.pm;
+      case 24:
         return images.example.Rial;
     }
   };
   renderTitle = () => {
     switch (this.state.menu) {
       case 1:
-        return 'بیت کوین';
+        return '(BTC) بیت کوین';
       case 2:
-        return 'بیت کوین کش';
+        return '(BCH) بیت کوین کش';
       case 3:
-        return 'ریپل';
+        return '(XRP) ریبل';
       case 4:
-        return 'ترون';
+        return '(TRX) ترون';
       case 5:
-        return 'لایت کوین ';
+        return '(LTC) لایت کوین';
       case 6:
-        return 'اتریوم';
+        return '(ETH) اتریوم';
       case 7:
-        return 'دش کوین';
+        return '(DASH) دش کوین';
       case 8:
-        return 'تتر';
+        return '(XMR) مونرو';
       case 9:
-        return 'پرفکت مانی';
+        return ' (DOGE) داج کوین';
       case 10:
+        return '(ADA) کاردانو';
+      case 11:
+        return '(XLM) استلار';
+      case 12:
+        return '(LINK) چین لینک';
+      case 13:
+        return ' (BNB) کوین بایننس';
+      case 14:
+        return '(IOTA) آیوتا';
+      case 15:
+        return '(NEO) نئو';
+      case 16:
+        return '(YFI) یرن فایننس';
+      case 17:
+        return '(YFII) یرن فایننس';
+      case 18:
+        return '(ZEC) زی کش';
+      case 19:
+        return '(SXP) سوایپ';
+      case 20:
+        return ' (USDT)(ERC20) تتر';
+      case 21:
+        return '(USDT)(OMNI) تتر';
+      case 22:
+        return '(USDT)(TRC20) تتر';
+      case 23:
+        return '(PM) پرفکت مانی';
+      case 24:
         return 'تومان';
     }
   };
   renderSubTitle = () => {
-    const {prices} = this.props;
+    const {
+      btcN,
+      bchN,
+      xrpN,
+      xmrN,
+      trxN,
+      ltcN,
+      ethN,
+      dogeN,
+      dashN,
+      bnbN,
+      adaN,
+      xlmN,
+      linkSN,
+      miotaN,
+      neoN,
+      zecN,
+      yfiN,
+      yfiiN,
+      sxpN,
+      usdtN,
+    } = this.state;
     switch (this.state.menu) {
       case 1:
-        return prices[0]?.name;
+        return btcN;
       case 2:
-        return prices[4]?.name;
+        return bchN;
       case 3:
-        return prices[3]?.name;
+        return xrpN;
       case 4:
-        return prices[16]?.name;
+        return trxN;
       case 5:
-        return prices[7]?.name;
+        return ltcN;
       case 6:
-        return prices[1]?.name;
+        return ethN;
       case 7:
-        return prices[25]?.name;
+        return dashN;
       case 8:
-        return prices[2]?.name;
+        return xmrN;
       case 9:
-        return 'Perfect Money';
+        return dogeN;
       case 10:
+        return adaN;
+      case 11:
+        return xlmN;
+      case 12:
+        return linkSN;
+      case 13:
+        return bnbN;
+      case 14:
+        return miotaN;
+      case 15:
+        return neoN;
+      case 16:
+        return yfiN;
+      case 17:
+        return yfiiN;
+      case 18:
+        return zecN;
+      case 19:
+        return sxpN;
+      case 20:
+        return usdtN;
+      case 21:
+        return usdtN;
+      case 22:
+        return usdtN;
+      case 23:
+        return 'Perfect Money';
+      case 24:
         return 'Toman';
     }
   };
@@ -441,128 +725,348 @@ class BuyingScreen extends Component {
       case 7:
         return images.example.dash;
       case 8:
-        return images.example.tether;
+        return images.example.monro;
       case 9:
-        return images.example.pm;
+        return images.example.doge;
       case 10:
+        return images.example.cardano;
+      case 11:
+        return images.example.staller;
+      case 12:
+        return images.example.chainlink;
+      case 13:
+        return images.example.binance;
+      case 14:
+        return images.example.iota;
+      case 15:
+        return images.example.neo;
+      case 16:
+        return images.example.yfi;
+      case 17:
+        return images.example.yfii;
+      case 18:
+        return images.example.zcash;
+      case 19:
+        return images.example.sxp;
+      case 20:
+        return images.example.tether;
+      case 21:
+        return images.example.tether;
+      case 22:
+        return images.example.tether;
+      case 23:
+        return images.example.pm;
+      case 24:
         return images.example.Rial;
     }
   };
   renderCurrent = () => {
-    const {prices, setting} = this.props;
-    const {dollar} = this.state;
-    const d = parseInt(setting[0]?.Defrent);
-    const p = parseInt(dollar?.sana_buy_usd?.p);
-    const def = Math.abs(d);
+    const {
+      btc,
+      bch,
+      xrp,
+      xmr,
+      trx,
+      ltc,
+      eth,
+      doge,
+      dash,
+      bnb,
+      ada,
+      xlm,
+      linkS,
+      miota,
+      neo,
+      zec,
+      yfi,
+      yfii,
+      sxp,
+      usdt,
+    } = this.state;
     switch (this.state.menu) {
       case 1:
-        return prices[0]?.current_price;
+        return btc;
       case 2:
-        return prices[4]?.current_price;
+        return bch;
       case 3:
-        return prices[3]?.current_price;
+        return xrp;
       case 4:
-        return prices[16]?.current_price;
+        return trx;
       case 5:
-        return prices[7]?.current_price;
+        return ltc;
       case 6:
-        return prices[1]?.current_price;
+        return eth;
       case 7:
-        return prices[25]?.current_price;
+        return dash;
       case 8:
-        return prices[2]?.current_price;
+        return xmr;
       case 9:
-        return 1;
+        return doge;
       case 10:
+        return ada;
+      case 11:
+        return xlm;
+      case 12:
+        return linkS;
+      case 13:
+        return bnb;
+      case 14:
+        return miota;
+      case 15:
+        return neo;
+      case 16:
+        return yfi;
+      case 17:
+        return yfii;
+      case 18:
+        return zec;
+      case 19:
+        return sxp;
+      case 20:
+        return usdt;
+      case 21:
+        return usdt;
+      case 22:
+        return usdt;
+      case 23:
+        return;
+      case 24:
         return;
     }
   };
   renderCurrent2 = () => {
-    const {dollar} = this.state;
-    const {prices, setting} = this.props;
-    const d = parseInt(setting[0]?.Defrent);
-    const p = parseInt(dollar?.sana_buy_usd?.p);
-    const def = Math.abs(d);
+    const {
+      btc,
+      bch,
+      xrp,
+      xmr,
+      trx,
+      ltc,
+      eth,
+      doge,
+      dash,
+      bnb,
+      ada,
+      xlm,
+      linkS,
+      miota,
+      neo,
+      zec,
+      yfi,
+      yfii,
+      sxp,
+      usdt,
+    } = this.state;
     switch (this.state.menu2) {
       case 1:
-        return prices[0]?.current_price;
+        return btc;
       case 2:
-        return prices[4]?.current_price;
+        return bch;
       case 3:
-        return prices[3]?.current_price;
+        return xrp;
       case 4:
-        return prices[16]?.current_price;
+        return trx;
       case 5:
-        return prices[7]?.current_price;
+        return ltc;
       case 6:
-        return prices[1]?.current_price;
+        return eth;
       case 7:
-        return prices[25]?.current_price;
+        return dash;
       case 8:
-        return prices[2]?.current_price;
+        return xmr;
       case 9:
-        return 1;
+        return doge;
       case 10:
+        return ada;
+      case 11:
+        return xlm;
+      case 12:
+        return linkS;
+      case 13:
+        return bnb;
+      case 14:
+        return miota;
+      case 15:
+        return neo;
+      case 16:
+        return yfi;
+      case 17:
+        return yfii;
+      case 18:
+        return zec;
+      case 19:
+        return sxp;
+      case 20:
+        return usdt;
+      case 21:
+        return usdt;
+      case 22:
+        return usdt;
+      case 23:
+        return 1;
+      case 24:
         return;
     }
   };
   renderRial = () => {
-    const {dollar} = this.state;
+    const {
+      btc,
+      bch,
+      xrp,
+      xmr,
+      trx,
+      ltc,
+      eth,
+      doge,
+      dash,
+      bnb,
+      ada,
+      xlm,
+      linkS,
+      miota,
+      neo,
+      zec,
+      yfi,
+      yfii,
+      sxp,
+      usdt,
+    } = this.state;
     const {prices, setting} = this.props;
-    const d = parseInt(setting[0]?.Defrent);
-    const p = parseInt(dollar?.sana_buy_usd?.p);
-    const def = Math.abs(d);
+    const d = parseFloat(setting[0]?.Defrent);
+    const p = parseFloat(setting[0]?.PerfectCost);
+    //const p = parseInt(dollar?.sana_buy_usd?.p);
+    const def = parseFloat(setting[0]?.Defrent);
     const vd = setting[0]?.vocher_defrens;
     switch (this.state.menu) {
       case 1:
-        return Math.abs((prices[0]?.current_price * def) / 10);
+        return Math.abs((btc * def) / 10);
       case 2:
-        return Math.abs((prices[4]?.current_price * def) / 10);
+        return Math.abs((bch * def) / 10);
       case 3:
-        return Math.abs((prices[3]?.current_price * def) / 10);
+        return Math.abs((xrp * def) / 10);
       case 4:
-        return Math.abs((prices[17]?.current_price * def) / 10);
+        return Math.abs((trx * def) / 10);
       case 5:
-        return Math.abs((prices[7]?.current_price * def) / 10);
+        return Math.abs((ltc * def) / 10);
       case 6:
-        return Math.abs((prices[1]?.current_price * def) / 10);
+        return Math.abs((eth * def) / 10);
       case 7:
-        return Math.abs((prices[25]?.current_price * def) / 10);
+        return Math.abs((dash * def) / 10);
       case 8:
-        return Math.abs((prices[2]?.current_price * def) / 10);
+        return Math.abs((xmr * def) / 10);
       case 9:
-        return Math.abs(def / 10);
+        return Math.abs((doge * def) / 10);
       case 10:
+        return Math.abs((ada * def) / 10);
+      case 11:
+        return Math.abs((xlm * def) / 10);
+      case 12:
+        return Math.abs((linkS * def) / 10);
+      case 13:
+        return Math.abs((bnb * def) / 10);
+      case 14:
+        return Math.abs((miota * def) / 10);
+      case 15:
+        return Math.abs((neo * def) / 10);
+      case 16:
+        return Math.abs((yfi * def) / 10);
+      case 17:
+        return Math.abs((yfii * def) / 10);
+      case 18:
+        return Math.abs((zec * def) / 10);
+      case 19:
+        return Math.abs((sxp * def) / 10);
+      case 20:
+        return Math.abs((usdt * def) / 10);
+      case 21:
+        return Math.abs((usdt * def) / 10);
+      case 22:
+        return Math.abs((usdt * def) / 10);
+
+      case 23:
+        return Math.abs(p / 10);
+      case 24:
         return 1;
     }
   };
   renderRial2 = () => {
-    const {dollar} = this.state;
+    const {
+      btc,
+      bch,
+      xrp,
+      xmr,
+      trx,
+      ltc,
+      eth,
+      doge,
+      dash,
+      bnb,
+      ada,
+      xlm,
+      linkS,
+      miota,
+      neo,
+      zec,
+      yfi,
+      yfii,
+      sxp,
+      usdt,
+    } = this.state;
     const {prices, setting} = this.props;
     const d = parseInt(setting[0]?.Defrent);
-    const p = parseInt(dollar?.sana_buy_usd?.p);
-    const vd = setting[0]?.vocher_defrens;
-    const def = Math.abs(d);
+    const p = parseInt(setting[0]?.PerfectCost);
+    const vd = parseInt(setting[0]?.vocher_defrens);
+    const cd = parseInt(setting[0]?.Coin_defrens);
+
+    const def = parseInt(setting[0]?.Defrent);
     switch (this.state.menu2) {
       case 1:
-        return Math.abs((prices[0]?.current_price * def) / 10);
+        return Math.abs((btc * def * cd) / 10);
       case 2:
-        return Math.abs((prices[4]?.current_price * def) / 10);
+        return Math.abs((bch * def * cd) / 10);
       case 3:
-        return Math.abs((prices[3]?.current_price * def) / 10);
+        return Math.abs((xrp * def * cd) / 10);
       case 4:
-        return Math.abs((prices[17]?.current_price * def) / 10);
+        return Math.abs((trx * def * cd) / 10);
       case 5:
-        return Math.abs((prices[7]?.current_price * def) / 10);
+        return Math.abs((ltc * def * cd) / 10);
       case 6:
-        return Math.abs((prices[1]?.current_price * def) / 10);
+        return Math.abs((eth * def * cd) / 10);
       case 7:
-        return Math.abs((prices[25]?.current_price * def) / 10);
+        return Math.abs((dash * def * cd) / 10);
       case 8:
-        return Math.abs((prices[2]?.current_price * def) / 10);
+        return Math.abs((xmr * def * cd) / 10);
       case 9:
-        return (Math.abs(def * vd) / 10).toFixed();
+        return Math.abs((doge * def * cd) / 10);
       case 10:
+        return Math.abs((ada * def * cd) / 10);
+      case 11:
+        return Math.abs((xlm * def * cd) / 10);
+      case 12:
+        return Math.abs((linkS * def * cd) / 10);
+      case 13:
+        return Math.abs((bnb * def * cd) / 10);
+      case 14:
+        return Math.abs((miota * def * cd) / 10);
+      case 15:
+        return Math.abs((neo * def * cd) / 10);
+      case 16:
+        return Math.abs((yfi * def * cd) / 10);
+      case 17:
+        return Math.abs((yfii * def * cd) / 10);
+      case 18:
+        return Math.abs((zec * def * cd) / 10);
+      case 19:
+        return Math.abs((sxp * def * cd) / 10);
+      case 20:
+        return Math.abs((usdt * def * cd) / 10);
+      case 21:
+        return Math.abs((usdt * def * cd) / 10);
+      case 22:
+        return Math.abs((usdt * def * cd) / 10);
+      case 23:
+        return Math.abs(p * vd) / 10;
+      case 24:
         return 1;
     }
   };
@@ -583,9 +1087,37 @@ class BuyingScreen extends Component {
       case 7:
         return 'DASH';
       case 8:
-        return 'USDT';
+        return 'BTC';
       case 9:
-        return '$';
+        return 'DOGE';
+      case 10:
+        return 'ADA';
+      case 11:
+        return 'XLM';
+      case 12:
+        return 'LINK';
+      case 13:
+        return 'BNB';
+      case 14:
+        return 'IOTA';
+      case 15:
+        return 'NEO';
+      case 16:
+        return 'YFI';
+      case 17:
+        return 'YFII';
+      case 18:
+        return 'ZEC';
+      case 19:
+        return 'SXP';
+      case 20:
+        return 'USDT';
+      case 21:
+        return 'USDT';
+      case 22:
+        return 'USDT';
+      case 23:
+        return 'PM';
     }
   };
   renderSymbol2 = () => {
@@ -605,9 +1137,37 @@ class BuyingScreen extends Component {
       case 7:
         return 'DASH';
       case 8:
-        return 'USDT';
+        return 'BTC';
       case 9:
-        return '$';
+        return 'DOGE';
+      case 10:
+        return 'ADA';
+      case 11:
+        return 'XLM';
+      case 12:
+        return 'LINK';
+      case 13:
+        return 'BNB';
+      case 14:
+        return 'IOTA';
+      case 15:
+        return 'NEO';
+      case 16:
+        return 'YFI';
+      case 17:
+        return 'YFII';
+      case 18:
+        return 'ZEC';
+      case 19:
+        return 'SXP';
+      case 20:
+        return 'USDT';
+      case 21:
+        return 'USDT';
+      case 22:
+        return 'USDT';
+      case 23:
+        return 'PM';
     }
   };
   render() {
@@ -617,8 +1177,6 @@ class BuyingScreen extends Component {
     const url = setting[0]?.Telegram_link;
     const p = parseInt(dollar?.sana_buy_usd?.p);
     const def = Math.abs(d);
-    let first;
-    let second;
     return (
       <ScrollView style={style.main}>
         <StatusBar hidden={true} />
@@ -840,7 +1398,13 @@ class BuyingScreen extends Component {
                           />
                         )}
                       </TouchableOpacity>
-                      <View style={{marginRight: wp(3.5), marginLeft: wp(3.5)}}>
+                      <View
+                        style={{
+                          marginRight: wp(3.5),
+                          marginLeft: wp(3.5),
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
                         <Text style={[style2.grayTxt, {marginRight: wp(2)}]}>
                           {this.renderTitle2()}
                         </Text>
@@ -874,7 +1438,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>بیت کوین</Text>
+                            <Text style={style.menuTxt}>بیت کوین(BTC)</Text>
                           </View>
                           <Image
                             source={images.example.bit}
@@ -897,7 +1461,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>بیت کوین کش</Text>
+                            <Text style={style.menuTxt}>بیت کوین کش(BCH)</Text>
                           </View>
                           <Image
                             source={images.example.bitcoinC}
@@ -920,7 +1484,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>ریبل</Text>
+                            <Text style={style.menuTxt}>ریبل(XRP)</Text>
                           </View>
                           <Image
                             source={images.example.xrp}
@@ -943,7 +1507,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>ترون</Text>
+                            <Text style={style.menuTxt}>ترون(TRX)</Text>
                           </View>
                           <Image
                             source={images.example.tron}
@@ -966,7 +1530,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>لایت کوین</Text>
+                            <Text style={style.menuTxt}>لایت کوین(LTC)</Text>
                           </View>
                           <Image
                             source={images.example.litecoin}
@@ -989,7 +1553,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>اتریوم</Text>
+                            <Text style={style.menuTxt}>اتریوم(ETH)</Text>
                           </View>
                           <Image
                             source={images.example.ethereum}
@@ -1012,7 +1576,7 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>دش کوین</Text>
+                            <Text style={style.menuTxt}>دش کوین(DASH)</Text>
                           </View>
                           <Image
                             source={images.example.dash}
@@ -1035,10 +1599,10 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>تتر</Text>
+                            <Text style={style.menuTxt}>مونرو(XMR)</Text>
                           </View>
                           <Image
-                            source={images.example.tether}
+                            source={images.example.monro}
                             style={style.imageMenu}
                             resizeMode="contain"
                           />
@@ -1058,7 +1622,329 @@ class BuyingScreen extends Component {
                           }}
                           style={style.menuItem}>
                           <View>
-                            <Text style={style.menuTxt}>پرفکت مانی</Text>
+                            <Text style={style.menuTxt}>داج کوین(DOGE)</Text>
+                          </View>
+                          <Image
+                            source={images.example.doge}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 10,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>کاردانو(ADA)</Text>
+                          </View>
+                          <Image
+                            source={images.example.cardano}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 11,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>استلار(XLM)</Text>
+                          </View>
+                          <Image
+                            source={images.example.staller}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 12,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>چین لینک(LINK)</Text>
+                          </View>
+                          <Image
+                            source={images.example.chainlink}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 13,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>کوین بایننس(BNB)</Text>
+                          </View>
+                          <Image
+                            source={images.example.binance}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 14,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>آیوتا(IOTA)</Text>
+                          </View>
+                          <Image
+                            source={images.example.iota}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 15,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>نئو(NEO)</Text>
+                          </View>
+                          <Image
+                            source={images.example.neo}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 16,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>یرن فایننس(YFI)</Text>
+                          </View>
+                          <Image
+                            source={images.example.yfi}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 17,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>یرن فایننس(YFII)</Text>
+                          </View>
+                          <Image
+                            source={images.example.yfii}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 18,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>زی کش(ZEC)</Text>
+                          </View>
+                          <Image
+                            source={images.example.zcash}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 19,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>سوایپ(SXP)</Text>
+                          </View>
+                          <Image
+                            source={images.example.sxp}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 20,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>تتر(USDT)(ERC20) </Text>
+                          </View>
+                          <Image
+                            source={images.example.tether}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 21,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>تتر(USDT)(OMNI)</Text>
+                          </View>
+                          <Image
+                            source={images.example.tether}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 22,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>تتر(USDT)(TRC20) </Text>
+                          </View>
+                          <Image
+                            source={images.example.tether}
+                            style={style.imageMenu}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                        <MenuDivider />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              menu2: 23,
+                              clearInput: '',
+                              clearInput2: '',
+                            });
+                            this.hideMenu2();
+                            if (this.renderTitle() !== 'تومان') {
+                              this.setState({dialog2: true});
+                            }
+                          }}
+                          style={style.menuItem}>
+                          <View>
+                            <Text style={style.menuTxt}>پرفکت مانی(PM)</Text>
                           </View>
                           <Image
                             source={images.example.pm}
@@ -1070,7 +1956,7 @@ class BuyingScreen extends Component {
                         <TouchableOpacity
                           onPress={() => {
                             this.setState({
-                              menu2: 10,
+                              menu2: 24,
                               clearInput: '',
                               clearInput2: '',
                             });
@@ -1242,7 +2128,13 @@ class BuyingScreen extends Component {
                         />
                       )}
                     </TouchableOpacity>
-                    <View style={{marginRight: wp(3), marginLeft: wp(3)}}>
+                    <View
+                      style={{
+                        marginRight: wp(3),
+                        marginLeft: wp(3),
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
                       <Text style={[style2.grayTxt, {marginRight: wp(2)}]}>
                         {this.renderTitle()}
                       </Text>
@@ -1251,6 +2143,7 @@ class BuyingScreen extends Component {
                       </Text>
                     </View>
                     <Menu
+                      style={{marginTop: hp(2)}}
                       ref={this.setMenuRef}
                       button={
                         <TouchableOpacity onPress={this.showMenu}>
@@ -1273,7 +2166,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>بیت کوین</Text>
+                          <Text style={style.menuTxt}>بیت کوین(BTC) </Text>
                         </View>
                         <Image
                           source={images.example.bit}
@@ -1296,7 +2189,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>بیت کوین کش</Text>
+                          <Text style={style.menuTxt}>بیت کوین کش(BCH)</Text>
                         </View>
                         <Image
                           source={images.example.bitcoinC}
@@ -1316,7 +2209,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>ریبل</Text>
+                          <Text style={style.menuTxt}>ریبل(XRP)</Text>
                         </View>
                         <Image
                           source={images.example.xrp}
@@ -1336,7 +2229,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>ترون</Text>
+                          <Text style={style.menuTxt}>ترون(TRX)</Text>
                         </View>
                         <Image
                           source={images.example.tron}
@@ -1356,7 +2249,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>لایت کوین</Text>
+                          <Text style={style.menuTxt}>لایت کوین(LTC)</Text>
                         </View>
                         <Image
                           source={images.example.litecoin}
@@ -1376,7 +2269,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>اتریوم</Text>
+                          <Text style={style.menuTxt}>اتریوم(ETH)</Text>
                         </View>
                         <Image
                           source={images.example.ethereum}
@@ -1396,7 +2289,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>دش کوین</Text>
+                          <Text style={style.menuTxt}>دش کوین(DASH)</Text>
                         </View>
                         <Image
                           source={images.example.dash}
@@ -1408,15 +2301,255 @@ class BuyingScreen extends Component {
                       <TouchableOpacity
                         onPress={() => {
                           this.setState({
-                            menu: 8,
                             clearInput: '',
                             clearInput2: '',
+                            menu: 8,
                           });
                           this.hideMenu();
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>تتر</Text>
+                          <Text style={style.menuTxt}>مونرو(XMR) </Text>
+                        </View>
+                        <Image
+                          source={images.example.monro}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 9,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>داج کوین(DOGE) </Text>
+                        </View>
+                        <Image
+                          source={images.example.doge}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 10,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>کاردانو(ADA) </Text>
+                        </View>
+                        <Image
+                          source={images.example.cardano}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 11,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>استلار(XLM) </Text>
+                        </View>
+                        <Image
+                          source={images.example.staller}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 12,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>چین لینک(LINK) </Text>
+                        </View>
+                        <Image
+                          source={images.example.chainlink}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 13,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>کوین بایننس(BNB) </Text>
+                        </View>
+                        <Image
+                          source={images.example.binance}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 14,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>آیوتا(IOTA) </Text>
+                        </View>
+                        <Image
+                          source={images.example.iota}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 15,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>نئو(NEO) </Text>
+                        </View>
+                        <Image
+                          source={images.example.neo}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 16,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>یرن فایننس(YFI) </Text>
+                        </View>
+                        <Image
+                          source={images.example.yfi}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 17,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>یرن فایننس(YFII) </Text>
+                        </View>
+                        <Image
+                          source={images.example.yfii}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 18,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>زی کش(ZEC) </Text>
+                        </View>
+                        <Image
+                          source={images.example.zcash}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 19,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>سوایپ(SXP) </Text>
+                        </View>
+                        <Image
+                          source={images.example.sxp}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 20,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>تتر(USDT)(ERC20) </Text>
                         </View>
                         <Image
                           source={images.example.tether}
@@ -1428,7 +2561,47 @@ class BuyingScreen extends Component {
                       <TouchableOpacity
                         onPress={() => {
                           this.setState({
-                            menu: 9,
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 21,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>تتر(USDT)(OMNI) </Text>
+                        </View>
+                        <Image
+                          source={images.example.tether}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            clearInput: '',
+                            clearInput2: '',
+                            menu: 22,
+                          });
+                          this.hideMenu();
+                        }}
+                        style={style.menuItem}>
+                        <View>
+                          <Text style={style.menuTxt}>تتر(USDT)(TRC20) </Text>
+                        </View>
+                        <Image
+                          source={images.example.tether}
+                          style={style.imageMenu}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <MenuDivider />
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            menu: 23,
                             clearInput: '',
                             clearInput2: '',
                           });
@@ -1436,7 +2609,7 @@ class BuyingScreen extends Component {
                         }}
                         style={style.menuItem}>
                         <View>
-                          <Text style={style.menuTxt}>پرفکت مانی</Text>
+                          <Text style={style.menuTxt}>پرفکت مانی(PM) </Text>
                         </View>
                         <Image
                           source={images.example.pm}
@@ -1448,9 +2621,10 @@ class BuyingScreen extends Component {
                       <TouchableOpacity
                         onPress={() => {
                           this.setState({
-                            menu: 10,
+                            menu: 24,
                             clearInput: '',
                             clearInput2: '',
+                            menu2: 1,
                           });
                           this.hideMenu();
                         }}
@@ -1621,7 +2795,7 @@ const style = StyleSheet.create({
   main: {flex: 1, backgroundColor: 'white'},
   logoCon: {alignItems: 'center'},
   title: {color: styles.color.colorText_GrAY, fontSize: normalize(45)},
-  grayTxt: {color: styles.color.colorText_GrAY},
+  grayTxt: {color: styles.color.colorText_GrAY, fontSize: normalize(14)},
   //normal: {fontSize: 16},
   txtView: {marginRight: wp(10), marginVertical: normalize(1, 'height')},
   black: {color: 'black'},
@@ -1652,7 +2826,8 @@ const style = StyleSheet.create({
     paddingHorizontal: wp(10),
     justifyContent: 'space-between',
   },
-  imageMenu: {width: wp(5), height: hp(5)},
+  imageMenu: {width: wp(5), height: hp(2.5)},
+  menuTxt: {fontSize: normalize(13)},
 });
 const style2 = StyleSheet.create({
   main: {marginHorizontal: '5%', padding: 20},
@@ -1693,6 +2868,6 @@ const style2 = StyleSheet.create({
   },
   grayTxt: {
     color: styles.color.colorText_GrAY,
-    fontSize: normalize(12),
+    fontSize: normalize(11),
   },
 });

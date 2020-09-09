@@ -1,668 +1,308 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import {
-  TouchableOpacity,
   View,
-  ImageBackground,
-  Image,
   StyleSheet,
-  Alert,
-  Keyboard,
+  Image,
+  TouchableOpacity,
+  Linking,
+  ScrollView,
 } from 'react-native';
-import {Item, Input, Container, Content} from 'native-base';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-  heightPercentageToDP,
-} from 'react-native-responsive-screen';
-import styles from '../../config/styles';
-import images from '../../config/images';
+import {tsImportEqualsDeclaration} from '@babel/types';
+import {Card, Item, Input} from 'native-base';
+import {persianNumber} from '../../lib/persian';
+import moment from 'moment-jalaali';
 import {Text} from '../../utils/Kit';
-import {Field, reduxForm} from 'redux-form';
-import normalize from 'react-native-normalize';
+import images from '../../config/images';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from 'react-native-responsive-screen';
 import {Button} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import {connect} from 'react-redux';
-import Dialog from 'react-native-dialog';
-import CustomModal from '../../components/CustomModal';
+import AppStyles from '../../config/styles';
+import normalize from 'react-native-normalize';
 import AsyncStorage from '@react-native-community/async-storage';
-import {persianNumber, latinNumber} from '../../lib/persian';
-import {ScrollView} from 'react-native-gesture-handler';
-import RollCalender from '../../components/RollCalender';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import moment from 'moment-jalaali';
-class SignInScreen extends Component {
+import {FetchSetting} from '../../api/methods/FetchPrices';
+import {connect} from 'react-redux';
+import CustomModal from '../../components/CustomModal';
+import HTML from 'react-native-render-html';
+import {
+  IGNORED_TAGS,
+  alterNode,
+  makeTableRenderer,
+} from 'react-native-render-html-table-bridge';
+import WebView from 'react-native-webview';
+
+const htmlContent = `
+    <h1>This HTML snippet is now rendered with native components !</h1>
+    <h2>Enjoy a webview-free and blazing fast application</h2>
+    
+    <em style="textAlign: center;">Look at how happy this native cat is</em>
+`;
+const config = {
+  WebViewComponent: WebView,
+};
+
+const renderers = {
+  table: makeTableRenderer(config),
+};
+
+const htmlConfig = {
+  alterNode,
+  renderers,
+  ignoredTags: IGNORED_TAGS,
+};
+class ArzScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Name: '',
-      Father_Name: '',
-      Bourning_Time: '',
-      Phone: '',
-      Mail: '',
-      Password: '',
-      retPass: '',
-      Fix: '',
-      telg: '',
-      visible: true,
-      dialog1: false,
-      dialog2: false,
+      wallet: '',
+      btn: 'ثبت شناسه تراکنش',
+      name: '',
+      id: '',
+      phone: '',
+      mail: '',
       dialog3: false,
-      dialog4: false,
-      dialog5: false,
-      dialog6: false,
-      dialog7: false,
-      dialog8: false,
-      dialog9: false,
-      dialog10: false,
-      dialog11: false,
-      type: '',
-      year: '',
-      day: '',
-      month: '',
-      Date: moment(new Date()).format('YYYY/MM/DD hh:mm:ss'),
+      dialog2: false,
+      dialog1: false,
+      memo: false,
+      dollar: [],
+      vocher: '',
+      number: '',
+      code: '',
+      tran: [],
+      memoVal: '',
+      title: this.props.navigation.getParam('title'),
     };
   }
-  componentDidMount() {
-    this.initialDate();
-  }
-  initialDate = () => {
-    const {Date} = this.state;
-    this.setState({
-      year: moment(Date, 'YYYY/MM/DD hh:mm:ss').jYear(),
-      month: moment(Date, 'YYYY/MM/DD hh:mm:ss').jMonth(),
-      day: moment(Date, 'YYYY/MM/DD hh:mm:ss').jDate(),
-    });
-  };
-  onDateChange = Date => {
-    console.log('Date', Date);
-    this.setState({Date});
-  };
-  updateValue(text, field) {
-    if (field === 'Name') {
-      this.setState({Name: text});
-    } else if (field === 'Father_Name') {
-      this.setState({Father_Name: text});
-    } else if (field === 'Bourning_Time') {
-      this.setState({Bourning_Time: text});
-    } else if (field === 'Mail') {
-      this.setState({Mail: text});
-    } else if (field === 'Phone') {
-      this.setState({Phone: text});
-    } else if (field === 'telg') {
-      this.setState({telg: text});
-    } else if (field === 'Password') {
-      this.setState({Password: text});
-    } else if (field === 'retPass') {
-      this.setState({retPass: text});
-    } else if (field === 'Fix') {
-      this.setState({Fix: text});
-    }
-  }
-  checkpassword(password) {
-    var strength = 0;
-    if (password.match(/[a-z]+/)) {
-      strength += 1;
-    }
-    if (password.match(/[A-Z]+/)) {
-      strength += 1;
-    }
-    if (password.match(/[0-9]+/)) {
-      strength += 1;
-    }
-    if (password.match(/[$@#&!]+/)) {
-      strength += 1;
-    }
-    switch (strength) {
-      case 0:
-        strength = 0;
-        break;
-
-      case 1:
-        strength = 25;
-        break;
-
-      case 2:
-        strength = 50;
-        break;
-
-      case 3:
-        strength = 75;
-        break;
-
-      case 4:
-        strength = 100;
-        break;
-    }
-    return strength;
-  }
-  submit = () => {
-    let collection = {};
-    collection.Name = this.state.Name;
-    collection.Father_Name = this.state.Father_Name;
-    collection.Bourning_Time = this.state.Bourning_Time;
-    collection.Mail = this.state.Mail;
-    collection.telg = this.state.telg;
-    collection.Phone = this.state.Phone;
-    collection.Password = this.state.Password;
-    collection.Fix = this.state.Fix;
-    console.log(collection);
-    const strength = this.checkpassword(collection.Password);
-    if (
-      /^[a-z]/.test(collection.Name) ||
-      /^[A-Z]/.test(collection.Name) ||
-      /^[a-z]/.test(collection.Father_Name) ||
-      /^[A-Z]/.test(collection.Father_Name) ||
-      collection.Name === '' ||
-      collection.Father_Name === ''
-    ) {
-      this.setState({dialog4: true});
-      return;
-    }
-    if (collection.Phone.length < 11 || collection.Fix < 11) {
-      this.setState({dialog5: true});
-      return;
-    }
-    if (!/[@ ]/g.test(collection.Mail) || !/[.com]/g.test(collection.Mail)) {
-      this.setState({dialog6: true});
-      return;
-    }
-
-    if (collection.Password.length < 8) {
-      this.setState({dialog1: true});
-      return;
-    }
-    if (this.state.Password !== this.state.retPass) {
-      this.setState({dialog2: true});
-      return;
-    }
-    if (strength < 75) {
-      this.setState({dialog9: true});
-      return;
-    }
-
-    fetch('https://jimbooexchange.com/php_api/insert_user.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
-      },
-      body: `Name=${collection.Name}&Father_Name=${
-        collection.Father_Name
-      }&Bourning_Time=${latinNumber(
-        `${this.state.year}/${this.state.month}/${this.state.day}`,
-      )}&Mail=${collection.Mail}&telg=${collection.telg}&Phone=${
-        collection.Phone
-      }&Password=${collection.Password}&Fix=${this.state.Fix}`, // <-- Post parameters
-    })
-      .then(response => response.text()) //   <------ this line
-      .then(response => {
-        if (response === 'ok') {
-          this.setState({dialog3: true});
-          return;
-        }
-        if (response === 'repeat') {
-          this.setState({dialog10: true});
-          return;
-        }
+  async componentWillMount() {
+    this.props.dispatch(FetchSetting());
+    fetch('https://api.tgju.online/v1/data/sana/json')
+      .then(response => response.json())
+      .then(json => {
+        this.setState({dollar: json});
       })
-
-      .catch(error => this.setState({type: error, dialog11: true}));
-    if (this.state.type === 'ok') {
-      this.setState({dialog3: true});
-      return;
+      .catch(error => console.error(error));
+    this.props.navigation.getParam('wallet');
+    this.setState({
+      wallet: this.props.navigation.getParam('wallet'),
+    });
+    const name = await AsyncStorage.getItem('name');
+    const id = await AsyncStorage.getItem('id');
+    const phone = await AsyncStorage.getItem('phone');
+    const mail = await AsyncStorage.getItem('mail');
+    this.setState({name: name});
+    this.setState({id: id});
+    this.setState({phone: phone});
+    this.setState({mail: mail});
+    fetch(
+      'https://jimbooexchange.com/php_api/get_transaction_by_user_id_and_user_name.php',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+        },
+        body: `Id=${id}&User_Name=${name}`,
+      },
+    )
+      .then(response => response.json()) //   <------ this line
+      .then(response => {
+        return this.setState({tran: response.data});
+      });
+    if (this.state.title === '(XLM) استلار') {
+      this.setState({memo: true, memoVal: '1063848465'});
     }
-    if (this.state.type === 'repeat') {
-      this.setState({dialog10: true});
-      return;
+    if (this.state.title === '(BNB) کوین بایننس') {
+      this.setState({memo: true, memoVal: '109341614'});
+    }
+    if (this.state.title === '(XRP) ریبل') {
+      this.setState({memo: true, memoVal: '108750487'});
+    }
+  }
+  renderAddress = () => {
+    switch (this.state.title) {
+      case '(BTC) بیت کوین':
+        return '1Mpmwf6JdP54h6XuMo6Ec58baTdNNgTDgZ';
+      case '(BCH) بیت کوین کش':
+        return '1Mpmwf6JdP54h6XuMo6Ec58baTdNNgTDgZ';
+      case '(XRP) ریبل':
+        return 'rEb8TK3gBgk5auZkwc6sHnwrGVJH8DuaLh';
+      case '(TRX) ترون':
+        return 'TA8G3v9psQqXEyYSXG8Ernc9SKkcPRm8zQ';
+      case '(LTC) لایت کوین':
+        return 'LLEbNoeq1GSvXPjGFPR6GR5Hj61B65oCvH';
+      case '(ETH) اتریوم':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(DASH) دش کوین':
+        return 'Xk23kPo1cAUhXQEYmq2gdxA64kNztdzF9G';
+      case '(XMR) مونرو':
+        return '88GFcqN7qhoNfsVYceQBwuPSVqaeTNdzu6mzVJL8wUUiEXoQx6SF6bNXWFdmiwkQGy2jJnXXdsyZr3F62R4CbZtP74igBdh';
+      case '(DOGE) داج کوین':
+        return 'DHoSNJj5hhstQjsPgoq2NZ4yrdLgZeuB8y';
+      case '(ADA) کاردانو':
+        return 'DdzFFzCqrhsm6w49ZmvjcUVsz43oc4g9EUR7wrn2z5xxUkbz4nhpNZyeBtKjcMvUzyWN7k8DuVqU7FVzb9pHraVkZYtvGTvXy7xmvkp2';
+      case '(XLM) استلار':
+        return 'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A';
+      case '(LINK) چین لینک':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(BNB) کوین بایننس':
+        return 'bnb136ns6lfw4zs5hg4n85vdthaad7hq5m4gtkgf23';
+      case '(IOTA) آیوتا':
+        return 'برای دریافت ادرس به پشتیبانی پیام دهید، ادرس این ارز در کیف پولها ثابت نیست';
+      case '(NEO) نئو':
+        return 'AXyVmdEcDHzt5Sc5sWRg8tUKvnyrfrcMrt';
+      case '(YFI) یرن فایننس':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(YFII) یرن فایننس':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(ZEC) زی کش':
+        return 't1SBkeKhoU27REm1fxRVSGXNMdy67xDzNjx';
+      case '(SXP) سوایپ':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(USDT)(ERC20) تتر':
+        return '0x00182b9427b1de27766b39330c40841001aa848e';
+      case '(USDT)(OMNI) تتر':
+        return '1JCQFQPw6nar8TZoHJKtQ9xVKAWUWKdq1m';
+      case '(USDT)(TRC20) تتر':
+        return 'TA8G3v9psQqXEyYSXG8Ernc9SKkcPRm8zQ';
+      default:
+        break;
     }
   };
+
   render() {
-    let second;
-    let third;
-    let forth;
-    let fifth;
-    let sixth;
-    let seven;
-    let eight;
-    let nine;
+    const {title, vocher, wallet} = this.state;
+    const {setting, navigation} = this.props;
+    const min = parseInt(setting[0]?.Min_Curency);
+    const max = parseInt(setting[0]?.Max_Curency);
+
     return (
-      <ScrollView contentContainerStyle={sajamstyles.container}>
-        <View style={sajamstyles.mainView}>
+      <ScrollView contentContainerStyle={{marginHorizontal: '3%'}}>
+        <View style={style.logoCon}>
+          <Image
+            source={images.global.logo}
+            style={{
+              height: heightPercentageToDP(25),
+              width: widthPercentageToDP(35),
+            }}
+            resizeMode="contain"
+          />
+        </View>
+        <Card>
           <View
             style={{
-              justifyContent: 'center',
+              flexDirection: 'row-reverse',
+              flexWrap: 'nowrap',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              marginTop: hp(2),
+              paddingHorizontal: '3%',
             }}>
-            <Text size="large" color="gray">
-              ثبت نام جدید
+            <Text color="green">خرید و فروش ارز های دیجیتال</Text>
+            <Text>
+              {' '}
+              {persianNumber(moment().format('jYYYY/jM/jD hh:mm:ss '))}
             </Text>
           </View>
+        </Card>
+        <Card style={{padding: '3%'}}>
+          <Text
+            style={{fontSize: 12, marginVertical: heightPercentageToDP(2)}}
+            color="gray">
+            تعیین قیمت نهایی زمانی است که شناسه تراکنش کاربر در شبکه بلاکچین
+            کانفرم می‌شود. کاربر پس از واریز ارز به کیف پول جیمبو باید شناسه
+            تراکنش یا همان txid خود و یا itc (بایننس) را ثبت نماید
+          </Text>
 
-          <View style={sajamstyles.View}>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="نام و نام خانوادگی"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                containerStyle={sajamstyles.item}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => second._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.updateValue(text, 'Name')}
-              />
-              <Image
-                source={images.login.males}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="نام پدر"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                containerStyle={sajamstyles.item}
-                ref={c => (second = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => third._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.updateValue(text, 'Father_Name')}
-              />
-              <Image
-                source={images.login.males}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="شماره موبایل"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                maxLength={11}
-                keyboardType="phone-pad"
-                containerStyle={sajamstyles.item}
-                ref={c => (third = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => forth._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.updateValue(text, 'Phone')}
-              />
-              <Image
-                source={images.login.phone}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="تلفن ثابت"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                maxLength={11}
-                keyboardType="phone-pad"
-                containerStyle={sajamstyles.item}
-                ref={c => (forth = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => fifth._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.setState({Fix: text})}
-              />
-              <Image
-                source={images.login.phone}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="ایمیل"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                containerStyle={sajamstyles.item}
-                ref={c => (fifth = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => sixth._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.updateValue(text, 'Mail')}
-              />
-              <Image
-                source={images.login.mail}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholderTextColor="#adb4bc"
-                style={[sajamstyles.inputStyle]}
-                containerStyle={sajamstyles.item}
-                ref={c => (sixth = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => {
-                  seven._root.focus();
-                }}
-                value={persianNumber(
-                  `تاریخ تولد  ${this.state.year}/${this.state.month}/${
-                    this.state.day
-                  }`,
-                )}
-                blurOnSubmit={false}
-                //onChangeText={text => this.updateValue(text, 'Bourning_Time')}
-                onFocus={() => {
-                  this.RBSheet.open();
-                  Keyboard.dismiss();
-                }}
-              />
-              <RBSheet
-                ref={ref1 => {
-                  this.RBSheet = ref1;
-                }}
-                height={200}
-                duration={250}
-                // closeOnDragDown={true}
-                closeOnPressMask={false}
-                customStyles={{
-                  container: {
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: styles.color.colorBackground_Gray,
-                  },
-                  wrapper: {
-                    backgroundColor: 'transparent',
-                  },
-                }}>
-                <RollCalender
-                  year={this.state.year}
-                  onChangeYear={year => this.setState({year})}
-                  month={this.state.month}
-                  onChangeMonth={month => this.setState({month})}
-                  day={this.state.day}
-                  onChangeDay={day => this.setState({day})}
-                  dateWithHour={this.onDateChange}
+          <Text gray style={{fontSize: normalize(12), color: 'gray'}}>
+            آدرس کیف پول{JSON.stringify(navigation.getParam('title'))}
+          </Text>
+          <Item style={style.item}>
+            <Input
+              placeholderTextColor="#adb4bc"
+              style={style.inputStyle}
+              //keyboardType="phone-pad"
+              containerStyle={style.item}
+              autoFocus={false}
+              blurOnSubmit
+              value={this.renderAddress()}
+            />
+          </Item>
+          {this.state.memo === true ? (
+            <View>
+              <Text gray style={{fontSize: normalize(11), color: 'gray'}}>
+                آدرس MEMO
+                <Text style={{color: 'red'}}>
+                  (آدرس Memo حتما وارد شود در غیر این صورت ارز مربوطه در شبکه گم
+                  میشود)
+                </Text>
+              </Text>
+              <Item style={style.item}>
+                <Input
+                  placeholder="e-voucher"
+                  placeholderTextColor="#adb4bc"
+                  style={style.inputStyle}
+                  //keyboardType="phone-pad"
+                  containerStyle={style.item}
+                  autoFocus={false}
+                  blurOnSubmit
+                  value={this.state.memoVal}
                 />
-                <Button
-                  TouchableComponent={TouchableOpacity}
-                  title="ثبت"
-                  containerStyle={sajamstyles.shadow}
-                  buttonStyle={{
-                    width: wp(30),
-                    borderRadius: normalize(25),
-                    height: hp(6),
-                  }}
-                  titleStyle={sajamstyles.medium}
-                  ViewComponent={LinearGradient} // Don't forget this!
-                  linearGradientProps={{
-                    colors: [
-                      styles.color.ColorGreen,
-                      styles.color.ColorGreenFos,
-                    ],
-                    start: {x: 0, y: 0.5},
-                    end: {x: 1, y: 0.5},
-                  }}
-                  onPress={() => this.RBSheet.close()}
-                />
-              </RBSheet>
-              <Image
-                source={images.login.dates}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="آیدی تلگرام(اختیاری) جهت دریافت رسیدهای بانکی و ارسال ارز به کیف"
-                placeholderTextColor="#adb4bc"
-                style={[sajamstyles.inputStyle, {fontSize: normalize(13)}]}
-                containerStyle={sajamstyles.item}
-                autoFocus={false}
-                ref={c => (seven = c)}
-                onSubmitEditing={() => eight._root.focus()}
-                blurOnSubmit
-                multiline={false}
-                secureTextEntry={true}
-                onChangeText={text => this.updateValue(text, 'telg')}
-              />
-              <Image
-                source={images.login.lock}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setState({visible: false});
-                }}>
-                <Image
-                  source={images.login.eye}
-                  style={{height: hp(5), width: wp(5), marginLeft: wp(5)}}
-                  resizeMode="contain"
-                  // tintColor={styles.color.ColorGreen}
-                />
-              </TouchableOpacity>
-              <Input
-                placeholder="رمز عبور"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                containerStyle={sajamstyles.item}
-                multiline={false}
-                secureTextEntry={this.state.visible}
-                ref={c => (eight = c)}
-                returnKeyType={'done'}
-                autoFocus={false}
-                onSubmitEditing={() => nine._root.focus()}
-                blurOnSubmit={false}
-                onChangeText={text => this.updateValue(text, 'Password')}
-              />
-              <Image
-                source={images.login.lock}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-            <Item style={sajamstyles.itemStyle}>
-              <Input
-                placeholder="تکرار رمز عبور"
-                placeholderTextColor="#adb4bc"
-                style={sajamstyles.inputStyle}
-                containerStyle={sajamstyles.item}
-                autoFocus={false}
-                ref={c => (nine = c)}
-                blurOnSubmit
-                multiline={false}
-                secureTextEntry={true}
-                onChangeText={text => this.updateValue(text, 'retPass')}
-              />
-              <Image
-                source={images.login.lock}
-                style={sajamstyles.img}
-                resizeMode="contain"
-                tintColor={styles.color.ColorGreen}
-              />
-            </Item>
-          </View>
-        </View>
-        <View style={sajamstyles.view2}>
+              </Item>
+            </View>
+          ) : null}
+        </Card>
+        <View style={style.btnView}>
           <Button
             TouchableComponent={TouchableOpacity}
             ViewComponent={LinearGradient} // Don't forget this!
-            title="ثبت نام"
-            containerStyle={sajamstyles.shadow}
-            buttonStyle={sajamstyles.btn}
-            titleStyle={sajamstyles.medium}
+            title={this.state.btn}
+            containerStyle={style.shadow}
+            buttonStyle={style.btn}
+            titleStyle={style.medium}
             linearGradientProps={{
-              colors: [styles.color.ColorGreen, styles.color.ColorGreenFos],
+              colors: [
+                AppStyles.color.ColorGreen,
+                AppStyles.color.ColorGreenFos,
+              ],
               start: {x: 0, y: 0.5},
               end: {x: 1, y: 0.5},
             }}
-            onPress={() => this.submit()}
+            onPress={() => navigation.navigate('Arz2')}
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row-reverse',
-            flexWrap: 'nowrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: normalize(20, 'height'),
-          }}>
-          <Text>ثبت نام کرده اید؟</Text>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Login');
-            }}>
-            <Text color="green" style={{marginRight: 5}}>
-              ورود
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <CustomModal
-            isVisible={this.state.dialog1}
-            title="خطا در ورود اطلاعات"
-            describe="رمز عبور نباید کمتر از 8 حرف باشد"
-            onConfirm={() => {
-              this.setState({dialog1: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog2}
-            title="خطا در ثبت اطلاعات"
-            describe="رمز ورود و تکرار آن یکسان نیستند"
-            onConfirm={() => {
-              this.setState({dialog2: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog4}
-            title="خطا در ورود اطلاعات"
-            describe="نام و نام خانوادگی خود را به فارسی تایپ کنید"
-            onConfirm={() => {
-              this.setState({dialog4: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog5}
-            title="خطا در ورود اطلاعات"
-            describe="شماره تماس خود را به درستی وارد کنید"
-            onConfirm={() => {
-              this.setState({dialog5: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog6}
-            title="خطا در ورود اطلاعات"
-            describe="ایمیل خود را درست وارد کنید"
-            onConfirm={() => {
-              this.setState({dialog6: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog3}
-            title="ثبت نام اولیه شما با موفقیت انجام شد"
-            describe="برای انجام معاملات، پس از ورود، ابتدا از بخش احراز حویت، حویت خود را تایید کنید."
-            onConfirm={() => {
-              this.setState({dialog3: false});
-              this.props.navigation.navigate('Login');
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog7}
-            title="خطا در ورود اطلاعات"
-            describe="تاریخ تولد را درست وارد کنید."
-            onConfirm={() => {
-              this.setState({dialog7: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog9}
-            title="کلمه عبور ضعیف"
-            describe="رمز ورود باید ترکیبی از اعداد، حروف کوچک انگلیسی، حروف بزرگ انگلیسی و کاراکتر های خاص (مانند @ ,$,%,&) باشد"
-            onConfirm={() => {
-              this.setState({dialog9: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog10}
-            title="خطا"
-            describe="کاربری با مشخصات فوق قبلاً ثبت نام کرده است."
-            onConfirm={() => {
-              this.setState({dialog10: false});
-            }}
-          />
-          <CustomModal
-            isVisible={this.state.dialog11}
-            title="خطا"
-            describe="بروز خطا در سرور"
-            onConfirm={() => {
-              this.setState({dialog11: false});
-            }}
-          />
-        </View>
+
+        <CustomModal
+          isVisible={this.state.dialog1}
+          title="مبلغ نادرست"
+          describe={persianNumber(`حداقل مبلغ معاملات ${min} ریال می باشد `)}
+          onConfirm={() => {
+            this.setState({dialog1: false});
+          }}
+        />
+        <CustomModal
+          isVisible={this.state.dialog2}
+          title="مبلغ نادرست"
+          describe={persianNumber(`حداکثر مبلغ معاملات ${max} ریال می باشد `)}
+          onConfirm={() => {
+            this.setState({dialog2: false});
+          }}
+        />
       </ScrollView>
     );
   }
 }
-export default connect(
-  null,
-  null,
-)(SignInScreen);
-const sajamstyles = StyleSheet.create({
-  container: {
-    height: heightPercentageToDP(95),
-    backgroundColor: '#f1f2f6',
-    justifyContent: 'center',
-  },
-  img: {height: hp(3), width: wp(3)},
-  img2: {height: hp(3.4), width: wp(3.4)},
-  mainView: {flex: 1, justifyContent: 'center'},
+const mapStateToProps = state => ({
+  setting: state.setting.items,
+  //dollar: state.dollar.items,
+  error: state.prices.error,
+});
 
-  formView: {marginHorizontal: '9%'},
-  itemStyle: {
-    alignSelf: 'center',
-    //marginBottom: hp(1),
-    paddingRight: wp(5),
-  },
-  inputStyle: {
-    fontFamily: 'IRANSansMobile',
-    textAlign: 'right',
-    paddingBottom: hp(0.8),
-  },
-  error: {color: 'red', margin: 5, marginHorizontal: 15},
-  view: {
-    marginRight: wp(10),
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  text: {padding: 10},
-  view2: {
-    flex: 0.12,
-    alignItems: 'center',
-  },
-  btn: {
-    borderRadius: normalize(25),
-    paddingVertical: hp(1),
-    paddingHorizontal: normalize(40),
-  },
+export default connect(mapStateToProps)(ArzScreen);
+const style = StyleSheet.create({
+  logoCon: {alignItems: 'center'},
+  btn: {borderRadius: normalize(25), paddingVertical: heightPercentageToDP(1)},
   medium: {fontSize: normalize(20), fontFamily: 'IRANSansMobile'},
   shadow: {
-    marginTop: hp(1),
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: {
@@ -671,5 +311,20 @@ const sajamstyles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
+  },
+  btnView: {
+    marginHorizontal: widthPercentageToDP(10),
+    marginTop: normalize(20, 'height'),
+  },
+  item: {
+    alignSelf: 'center',
+    marginBottom: '3%',
+    borderColor: AppStyles.color.ColorGreen,
+  },
+  inputStyle: {
+    fontFamily: 'IRANSansMobile',
+    textAlign: 'right',
+    paddingBottom: heightPercentageToDP(0.8),
+    fontSize: normalize(11),
   },
 });
